@@ -1,5 +1,4 @@
 #!/bin/bash
-#Autora: Roseli da Rocha Barbosa
 
 #####Instalação e configuração Uperf#####
 
