@@ -35,10 +35,10 @@ case "$x" in
 
 			if [ $escolha == "1" ]
 			then
-                    echo "Informe o endereço do host remoto(cliente): "
+				echo "Informe o endereço do host remoto(cliente): "
 		                read hostRemoto
  
-				            echo "Informe a quantidade de threads que deseja executar:"
+				echo "Informe a quantidade de threads que deseja executar:"
                 		read qtdThread
                 		echo "Informe o protocolo de deseja utilizar:"
                 		read protocolo
@@ -69,12 +69,6 @@ case "$x" in
 
 
 
-					echo "####################Experimento Unidirecional####################" >> resultado
-					echo "Experimento de número $cont1..." >> resultado
-					echo "Durante a execução do experimento... " >> resultado
-					echo "--------------------------------------------------" >> resultado
-					echo "|    LATÊNCIA             JITTER                 |" >> resultado
-					echo "--------------------------------------------------" >> resultado
 
 					#Chama o script que realiza o ping passando por parâmetro a duração e o ip do host remoto digitado
 
@@ -82,46 +76,44 @@ case "$x" in
 
 					#Executa o experimento como master e joga a saída para o arquivo saidaUperf
 
+					echo "Executando experimento $cont1..."
+
                         		./debian/uperf/usr/bin/uperf -m workloads/servidorUnidirecional.xml -a -e -p > saidaUperf
 
-					#Aplica o sed na saída do ping para usar como separador padrão a /, com o resultado é aplicado o awk pegando o campo da latência e o jitter durante a execução do experimento
+					#Aplica o sed na saída do ping para usar como separador padrão a barra, com o resultado é aplicado o awk pegando o campo da latência e o jitter durante a execução do experimento
 					sed 's, ,/,g' saida1 | tail -1 > saidaSed1
-					cat saidaSed1 | awk -F "/" '{print $8, $10}' >> resultado
+				        latenciaDurante=$(cat saidaSed1 | awk -F "/" '{print $8}')
+					jitterDurante=$(cat saidaSed1 | awk -F "/" '{print $10}')
+
 
 					#Com a saída do Uperf é aplicado um grep para pegar a linha com os totais. Em seguida aplicado o pipe como separador padrão e utilizado o awk para pegar o resultado da taxa de transferência do experimento
 					cat saidaUperf | grep master > saidaUperfThroughput
 					sed "s/[[:space:]]\+/|/g" saidaUperfThroughput > saidaThroughputFinal
-					echo "A taxa de transferência por segundo do experimento foi de: " >> resultado
-					cat saidaThroughputFinal | awk -F "|" '{print $4}' >> resultado
+					taxaTransferencia=$(cat saidaThroughputFinal | awk -F "|" '{print $4}')
 
-
-					#Com a saída do Uperf é aplicado um grep para pegar a linha com as diferenças do que foi transmitido para o que foi recebido. Em seguida aplicado o pipe como separador padrão e utilizado o awk para pegar o campo com a diferença da perca de pacote
-					cat saidaUperf | grep "Difference(%)" > saidaUperfPerca
-					sed "s/[[:space:]]\+/|/g"  saidaUperfPerca > saidaPercaFinal
-					echo "A taxa de perca de pacotes do experimento foi de: " >> resultado
-                                        cat saidaPercaFinal | awk -F "|" '{print $3}' >> resultado
+					#Aplica o sed na saída do ping usando o pipe como separador padrão, com o resultado é aplicado o awk pegando o campo com a taxa de perda de pacotes
+					sed "s/[[:space:]]\+/|/g"  saida1 | tail -2 > saidaPerdaFinal
+	                                taxaPerda=$(cat saidaPerdaFinal | awk -F "|" '{print $6}')
 
 
 					#Após a execução do experimento é executado o script do ping novamente de acordo com a duração digitada, para que seja possível avaliar a diferença
-					echo "Aguardando a execução do ping após o experimento de número $cont1..."
-					echo "Após a execução do experimento..." >> resultado
-            				echo "--------------------------------------------------" >> resultado
-                      		        echo "|    LATÊNCIA             JITTER                 |" >> resultado
-                         	        echo "--------------------------------------------------" >> resultado
 					./ping.sh $duracao $hostRemoto > saida2
 					sed 's, ,/,g' saida2 | tail -1 > saidaSed2
-                        	        cat saidaSed2 | awk -F "/" '{print $8, $10}' >> resultado
+                        	        latenciaApos=$(cat saidaSed2 | awk -F "/" '{print $8}')
+					jitterApos=$(cat saidaSed2 | awk -F "/" '{print $10}')
+
+					echo "$latenciaDurante	$jitterDurante	$taxaTransferencia	$taxaPerda	$latenciaApos	$jitterApos" >> resultado
+
+
 				done
 
 			elif [ $escolha == "2" ]
 			then
 				echo "Informe o endereço do host remoto(cliente): "
 		                read hostRemoto2
- 
+
 				echo "Informe a quantidade de threads que deseja executar:"
                 		read qtdThread2
-                		echo "Informe a quantidade de interações que deseja executar:"
-                		read qtdInteracao2
                 		echo "Informe o protocolo de deseja utilizar:"
                 		read protocolo2
                 		echo "Informe o tamanho do buffer:"
@@ -148,45 +140,37 @@ case "$x" in
 			                sed -i 's/size=/size='$mensagem2'/g' workloads/servidorBidirecional.xml
 
 
-					echo "####################Experimento Bidirecional####################" >> resultado
-                		        echo "Experimento de número $cont2..." >> resultado
-					echo "Durante a execução do experimento... " >> resultado
-                         	        echo "--------------------------------------------------" >> resultado
-                      		        echo "|    LATÊNCIA             JITTER                 |" >> resultado
-           	                        echo "--------------------------------------------------" >> resultado 
 
 					#Chama o script que realiza o ping passando por parâmetro a duração e o ip do host remoto digitado
                    	               ./ping.sh $duracao2 $hostRemoto2 > saida1 &
 
+
+					echo "Executando experimento $cont2..."
 					#Executa o experimento como master e joga a saída para o arquivo saidaUperf
                           	       ./debian/uperf/usr/bin/uperf -m workloads/servidorBidirecional.xml -a -e -p > saidaUperf
 
 					#Aplica o sed na saída do ping para usar como separador padrão a /, com o resultado é aplicado o awk pegando o campo da latência e o jitter durante a execução do experimento
                                 	sed 's, ,/,g' saida1 | tail -1 > saidaSed1
-                                	cat saidaSed1 | awk -F "/" '{print $8, $10}' >> resultado
+                                        latenciaDurante2=$(cat saidaSed1 | awk -F "/" '{print $8}')
+					jitterDurante2=$(cat saidaSed1 | awk -F "/" '{print $10}')
 
 					#Com a saída do Uperf é aplicado um grep para pegar a linha com os totais. Em seguida aplicado o pipe como separador padrão e utilizado o awk para pegar o resultado da taxa de transferência do experimento
 					cat saidaUperf | grep master > saidaUperfThroughput
 					sed "s/[[:space:]]\+/|/g" saidaUperfThroughput > saidaThroughputFinal
-					echo "A taxa de transferência por segundo do experimento foi de: " >> resultado
-					cat saidaThroughputFinal | awk -F "|" '{print $4}' >> resultado
+					taxaTransferencia2=$(cat saidaThroughputFinal | awk -F "|" '{print $4}')
 
 
-					#Com a saída do Uperf é aplicado um grep para pegar a linha com as diferenças do que foi transmitido para o que foi recebido. Em seguida aplicado o pipe como separador padrão e utilizado o awk para pegar o campo com a diferença da perca de pacote
-					cat saidaUperf | grep "Difference(%)" > saidaUperfPerca
-					sed "s/[[:space:]]\+/|/g"  saidaUperfPerca > saidaPercaFinal
-					echo "A taxa de perca de pacotes do experimento foi de: " >> resultado
-                                        cat saidaPercaFinal | awk -F "|" '{print $3}' >> resultado
+                                     	#Aplica o sed na saída do ping usando o pipe como separador padrão, com o resultado é aplicado o awk p$
+                                        sed "s/[[:space:]]\+/|/g"  saida1 | tail -2 > saidaPerdaFinal
+                                        taxaPerda2=$(cat saidaPerdaFinal | awk -F "|" '{print $6}')
 
 					#Após a execução do experimento é executado o script do ping novamente de acordo com a duração digitada, para que seja possível avaliar a diferença
-                                	echo "Aguardando a execução do ping após o experimento de número $cont2..."
-					echo "Após a execução do experimento..." >> resultado
-                                	echo "--------------------------------------------------" >> resultado
-                                	echo "|    LATÊNCIA             JITTER                 |" >> resultado
-                                	echo "--------------------------------------------------" >> resultado
                                 	./ping.sh $duracao2 $hostRemoto2 > saida2
                                 	sed 's, ,/,g' saida2 | tail -1 > saidaSed2
-                                	cat saidaSed2 | awk -F "/" '{print $8, $10}' >> resultado
+					latenciaApos2=$(cat saidaSed2 | awk -F "/" '{print $8}')
+					jitterApos2=$(cat saidaSed2 | awk -F "/" '{print $10}')
+
+					echo "$latenciaDurante2	$jitterDurante2	$taxaTransferencia2	$taxaPerda2	$latenciaApos2	$jitterApos2" >> resultado
 
 				done
 
@@ -246,7 +230,7 @@ echo "================================================"
                 		read protocolo4
                 		echo "Informe o tamanho do buffer:"
                 		read buffer4
-                		echo "Informe a duração de cada transação:"
+                		echo "Informe a duração de cada transação em segundos:"
                 		read duracao4
                 		echo "Informe o tamanho da mensagem: "
                 		read mensagem4
