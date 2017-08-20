@@ -94,7 +94,7 @@ echo "================================================"
 		echo "O roteador é o gateway padrão? 1 - Sim 2 - Não"
 		read gatewayPadrao
 
-         	if [ $gatewayPadrao == "1"]
+         	if [ $gatewayPadrao == "1" ]
                 then
                 	neutron router-gateway-set router $interfaceRede
                 elif [ $gatewayPadrao == "2" ]
@@ -126,7 +126,7 @@ echo "================================================"
 		echo "Digite o nome da imagem desejada: "
 	 	read imagem
 
-		echo "--------------------------------------------------"
+		echo "--------------------------------------------------"9
 		echo "|   	        NETWORK                        |"
 		echo "--------------------------------------------------"
 		
