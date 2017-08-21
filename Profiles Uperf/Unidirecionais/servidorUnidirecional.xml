@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<profile name="Servidor Unidirecional">
+  <group nthreads= >
+        <transaction iterations="1" >
+            <flowop type="accept" options="remotehost= protocol=   
+            wndsz= tcp_nodelay"/>
+        </transaction>
+        <transaction duration= >
+            <flowop type="read" options="size= "/>
+        </transaction>
+        <transaction iterations="1" >
+            <flowop type="disconnect" />
+        </transaction>
+  </group>
+</profile>
