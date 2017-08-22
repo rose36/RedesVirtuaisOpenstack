@@ -1,88 +1,140 @@
-# Project Title
+# Redes Virtuais Openstack
 
-One Paragraph of project description goes here
+As VLANs (Virtual Local Area Network), ou redes locais virtuais, visam fornecer o isolamento do tráfego de rede entre os usuários pertencentes à mesma arquitetura física. Nos últimos anos, a computação em nuvem desapontou como um dos maiores avanços da tecnologia da informação e revolucionou a gestão de recursos computacionais em ambientes empresariais e acadêmicos. Com a popularidade da computação em nuvem, surgiu a necessidade de ampliar o suporte a múltiplos inquilinos pertencentes a redes logicamente independentes, fomentando o advento das redes de virtualização por sobreposição. Nesse cenário, o OpenStack se tornou propulsor, ganhando cada vez mais novos adeptos por sua natureza aberta e atualmente ser considerado um dos maiores orquestradores de nuvem. Com o intuito de avaliar o desempenho das tecnologias de virtualização de redes suportadas pela plataforma OpenStack, este trabalho visa comparar os protocolos de tunelamento VXLAN e GRE, utilizados para criar redes virtuais. Para avaliar o desempenho e escalabilidade da infraestrutura de nuvem, foram analisadas métricas como vazão, latência e jitter para fluxos de conexão TCP e UDP usando a ferramenta de geração e medição
+de tráfego Uperf.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### Prerequisites
+### Configuração do ambiente
 
-What things you need to install the software and how to install them
+Passo 1:
+Substituir as configurações dos arquivos ml2_conf.ini, openvswitch_agent.ini ou linuxbridge_agent.ini nos nodes controller e compute;
 
-```
-Give examples
-```
+Passo 2:
+Alterar arquivos dhcp_agent.ini, l3_agent.ini para usar o agente OVS ou o agente Linux Bridge;
 
-### Installing
-
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+Passo 3:
+Apagar toda base de dados existente do OVS para implantações usando o OVS como mecanismo de acesso:
 
 ```
-Give the example
+$ service openvswitch-switch stop
+```
+```
+$ rm -rf /var/log/openvswitch/*
+```
+```
+$ rm -rf /etc/openvswitch/conf.db
+```
+```
+$ service openvswitch-switch start
+```
+```
+$ ovs-vsctl show #Este comando deverá retornar apenas o ID do OVS e sua versão
+```
+Passo 4:
+
+Adicionar bridge:
+Configurações usando o OVS:
+```
+$ sudo ovs-vsctl add-br <nome_bridge>
+```
+```
+$ sudo ovs-vsctl add-port <nome_bridge>
+```
+Configurações usando Linux Bridge:
+```
+$ sudo brctl addbr <nome_bridge>
+```
+```
+$ sudo brctl addif <nome_bridge>
+```
+```
+$ sudo ifconfig up
+```
+```
+$ sudo brctl show
 ```
 
-And repeat
-
+Passo 5:
+Redefinir o banco de dados Neutron da seguinte maneira:
 ```
-until finished
+$ mysql -u root -p #Em seguida inserir a senha do mysql
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
 ```
-Give an example
+$ drop database neutron;
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
 ```
-Give an example
+$ create database neutron;
+```
+```
+$ GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'localhost' IDENTIFIED BY 'senha_neutron'; #Substituir senha_neutron pela senha atribuida na configuração
+```
+```
+$ GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%' IDENTIFIED BY 'senha_neutron'; #Substituir senha_neutron pela senha atribuida na configuração
+```
+```
+$ quit
+```
+```
+$ sudo su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 ```
 
-## Deployment
+Passo 6:
+Reiniciar os serviços neutron-server e os agentes:
 
-Add additional notes about how to deploy this on a live system
+```
+$ service neutron-server restart
+```
+Em configurações utilizando o OVS:
+```
+$ service neutron-openvswitch-agent restart
+```
+```
+$ service openvswitch-switch restart
+```
+Em configurações utilizando Linux Bridge:
+```
+$ service neutron-linuxbridge-agent restart
+```
 
-## Built With
+Passo 7:
+Usar o script criacao-automatizada-openstack.sh para criação de redes, subredes, roteadores e instâncias.
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+Passo 8: 
+Liberar ICMP, SSH, fluxos TCP e UDP no security group.
 
-## Contributing
+Passo 9:
+Realizar criação de instâncias para validar o ambiente.
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Dica: É possível definir senhas padronizadas para não precisar acessar as máquinas por chaves (Sugestão útil apenas para ambientes de testes)
 
-## Versioning
+- Criar arquivo userdata.txt com as seguintes informações:
+```
+#cloud-config
+password: <senha_desejada>
+chpasswd: { expire: False }
+ssh_pwauth: True
+```
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-## Authors
+### Experimentos 
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+Passo 1:
+Usar script uperf-install.sh para instalação e configuração do uperf e realizar a instalação do iperf em experimentos com fluxos UDP entre compute nodes diferentes.
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+Passo 2: 
+Utilizar o script uperf.sh para a geração de tráfego e os profiles criados para conexões unidirecionais e bidirecionais. 
+OBS: O script uperf.sh utiliza o script do ping.sh que é disparado ao iniciar o experimento. Após a finalização de cada experimento, teremos como saída a latência, o jitter, taxa de perda de pacotes e a vazão.
 
-## License
+Apenas para experimentos entre nodes diferentes com fluxos UDP, será necessário utilizar o script iperf.sh para geração de tráfego controlado.
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
 
+
+## Autora
+
+Roseli da Rocha Barbosa
+Graduanda em Redes de Computadores na Universidade Federal do Ceará
