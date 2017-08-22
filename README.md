@@ -113,7 +113,7 @@ openstack server create --flavor <flavor_desejado> --image <imagem_desejada> --n
 #=======================================================================#
 
 #Passo 1:
-Usar script uperf-install.sh para instalação e configuração do uperf e realizar a instalação do iperf com o apt-get em experimentos com fluxos udp entre compute nodes diferentes.
+Usar script uperf-install.sh para instalação e configuração do uperf e realizar a instalação do iperf em experimentos com fluxos UDP entre compute nodes diferentes.
 
 #Passo 2: 
 Utilizar o script uperf.sh para a geração de tráfego e os profiles criados para conexões unidirecionais e bidirecionais. 
