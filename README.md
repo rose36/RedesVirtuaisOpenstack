@@ -32,13 +32,13 @@ $ ovs-vsctl show #Este comando deverá retornar apenas o ID do OVS e sua versão
 #Passo 4:
 Adicionar bridge:
 
-Configurações usando o OVS:
+- Configurações usando o OVS:
 
 $ sudo ovs-vsctl add-br <nome_bridge>
 
 $ sudo ovs-vsctl add-port <nome_bridge> <interface>
 
-Configurações usando Linux Bridge
+- Configurações usando Linux Bridge
 
 $ sudo brctl addbr <nome_bridge>
 
@@ -72,13 +72,13 @@ Reiniciar os serviços neutron-server e os agentes:
 
 $ service neutron-server restart
 
-Em configurações utilizando o OVS:
+- Em configurações utilizando o OVS:
 
 $ service neutron-openvswitch-agent restart
 
 $ service openvswitch-switch restart
 
-Em configurações utilizando Linux Bridge:
+- Em configurações utilizando Linux Bridge:
 
 $ service neutron-linuxbridge-agent restart
 
