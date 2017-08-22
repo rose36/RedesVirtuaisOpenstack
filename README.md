@@ -84,7 +84,7 @@ $ service neutron-linuxbridge-agent restart
 
 #Passo 7
 
-Usar o script criacao-automatizada-openstack.sh para criação de redes, subredes e roteadores.
+Usar o script criacao-automatizada-openstack.sh para criação de redes, subredes, roteadores e instâncias.
 
 #Passo 8:
 
@@ -102,9 +102,7 @@ password: <senha_desejada>
 chpasswd: { expire: False }
 ssh_pwauth: True
 
-Comando para criar instâncias:
 
-openstack server create --flavor <flavor_desejado> --image <imagem_desejada> --nic net-id=<id_red> --user-data=./userdata.txt --security-group <nome_security_group> --key-name <nome_chaves> <nome_instância>
 
 
 
