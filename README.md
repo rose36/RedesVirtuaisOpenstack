@@ -39,7 +39,7 @@ $ sudo ifconfig <nome bridge> up
 $ sudo brctl show
 
 #Passo 5:
-Redefinir o banco de dados Neutron, da seguinte maneira:
+Redefinir o banco de dados Neutron da seguinte maneira:
 
 $ mysql -u root -p #Em seguida inserir a senha do mysql
 $ drop database neutron;
