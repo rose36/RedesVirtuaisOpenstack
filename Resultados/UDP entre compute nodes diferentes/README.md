@@ -11,8 +11,6 @@ novo cenário possuía duas redes privadas com instâncias alocadas entre comput
 cada rede privada. Constatou-se que quando um dos clientes gera muito tráfego UDP, é possível congestionar e criar instabilidade nos compute nodes envolvidos na comunicação, a ponto de
 afetar outros clientes.
 
-Diante do problema detectado, um novo experimento foi planejado com UDP, mas usando a ferramenta Iperf, que permite controlar a taxa de geração de tráfego. Foram avaliadas
+<p align="justify">Diante do problema detectado, um novo experimento foi planejado com UDP, mas usando a ferramenta Iperf, que permite controlar a taxa de geração de tráfego. Foram avaliadas
 apenas conexões unidirecionais, com taxas de transferências de 100(Mb/s), 150(Mb/s) e 200(Mb/s). A escolha desses valores foi baseada nos resultados obtidos nos experimentos
 usando o TCP.
-
-</p>
