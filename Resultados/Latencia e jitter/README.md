@@ -1,7 +1,7 @@
 # Latência e jitter
 
 
-<p align="justify"> As Tabelas 10 e 11 apresentam a média e o intervalo de confiança da latência e do jitter respectivamente, coletados durante os experimentos. Em conexões utilizando o protocolo
+<p align="justify"> As Tabelas apresentam a média e o intervalo de confiança da latência e do jitter respectivamente, coletados durante os experimentos. Em conexões utilizando o protocolo
 TCP, foram apresentados todos os resultados para cada variação na quantidade de instâncias, levando em consideração ainda como estão alocadas. Já para as conexões utilizando o UDP,
 apenas os resultados dos experimentos entre instâncias alocadas no mesmo compute node são apresentados.
 
