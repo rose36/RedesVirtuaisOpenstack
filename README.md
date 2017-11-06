@@ -6,13 +6,13 @@
 ### Configuração do ambiente
 
 Passo 1:
-Substituir as configurações dos arquivos ml2_conf.ini, openvswitch_agent.ini ou linuxbridge_agent.ini nos nodes controller e compute;
+<p align="justify">Substituir as configurações dos arquivos ml2_conf.ini, openvswitch_agent.ini ou linuxbridge_agent.ini nos nodes controller e compute;
 
 Passo 2:
-Alterar arquivos dhcp_agent.ini, l3_agent.ini para usar o agente OVS ou o agente Linux Bridge;
+<p align="justify">Alterar arquivos dhcp_agent.ini, l3_agent.ini para usar o agente OVS ou o agente Linux Bridge;
 
 Passo 3:
-Apagar toda base de dados existente do OVS para implantações usando o OVS como mecanismo de acesso:
+<p align="justify">Apagar toda base de dados existente do OVS para implantações usando o OVS como mecanismo de acesso:
 
 ```
 $ service openvswitch-switch stop
@@ -96,15 +96,15 @@ $ service neutron-linuxbridge-agent restart
 ```
 
 Passo 7:
-Usar o script criacao-automatizada-openstack.sh para criação de redes, subredes, roteadores e instâncias.
+<p align="justify">Usar o script criacao-automatizada-openstack.sh para criação de redes, subredes, roteadores e instâncias.
 
 Passo 8: 
-Liberar ICMP, SSH, fluxos TCP e UDP no security group.
+<p align="justify">Liberar ICMP, SSH, fluxos TCP e UDP no security group.
 
 Passo 9:
-Realizar criação de instâncias para validar o ambiente.
+<p align="justify">Realizar criação de instâncias para validar o ambiente.
 
-Dica: É possível definir senhas padronizadas para não precisar acessar as máquinas por chaves (Sugestão útil apenas para ambientes de testes)
+<p align="justify">Dica: É possível definir senhas padronizadas para não precisar acessar as máquinas por chaves (Sugestão útil apenas para ambientes de testes)
 
 - Criar arquivo userdata.txt com as seguintes informações:
 ```
@@ -118,13 +118,13 @@ ssh_pwauth: True
 ### Experimentos 
 
 Passo 1:
-Usar script uperf-install.sh para instalação e configuração do uperf e realizar a instalação do iperf em experimentos com fluxos UDP entre compute nodes diferentes.
+<p align="justify">Usar script uperf-install.sh para instalação e configuração do uperf e realizar a instalação do iperf em experimentos com fluxos UDP entre compute nodes diferentes.
 
 Passo 2: 
-Utilizar o script uperf.sh para a geração de tráfego e os profiles criados para conexões unidirecionais e bidirecionais. 
-OBS: O script uperf.sh utiliza o script do ping.sh que é disparado ao iniciar o experimento. Após a finalização de cada experimento, teremos como saída a latência, o jitter, taxa de perda de pacotes e a vazão.
+<p align="justify">Utilizar o script uperf.sh para a geração de tráfego e os profiles criados para conexões unidirecionais e bidirecionais. 
+<p align="justify">OBS: O script uperf.sh utiliza o script do ping.sh que é disparado ao iniciar o experimento. Após a finalização de cada experimento, teremos como saída a latência, o jitter, taxa de perda de pacotes e a vazão.
 
-Apenas para experimentos entre nodes diferentes com fluxos UDP, será necessário utilizar o script iperf.sh para geração de tráfego controlado.
+<p align="justify">Apenas para experimentos entre nodes diferentes com fluxos UDP, será necessário utilizar o script iperf.sh para geração de tráfego controlado.
 
 
 
@@ -135,4 +135,3 @@ Apenas para experimentos entre nodes diferentes com fluxos UDP, será necessári
 Roseli da Rocha Barbosa
 
 Graduanda em Redes de Computadores na Universidade Federal do Ceará
-</p>
