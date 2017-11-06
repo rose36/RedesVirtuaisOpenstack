@@ -6,7 +6,7 @@ gerando fluxos UDP entre compute nodes diferentes, foi identificada uma instabil
 dos experimentos. Após pesquisar na literatura pelo problema ocorrido, constatou-se que o experimento com UDP estava gerando tráfego como um ataque de negação de serviço, conhecido
 como UDP Flood Attack, podendo ser iniciado quando se envia um grande número de pacotes UDP para portas aleatórias de um determinado host remoto.
 
-Com a descoberta, um novo experimento foi realizado para investigar se o problema afetava também redes virtuais de diferentes clientes do OpenStack, que deveriam ser isoladas. O
+<p align="justify">Com a descoberta, um novo experimento foi realizado para investigar se o problema afetava também redes virtuais de diferentes clientes do OpenStack, que deveriam ser isoladas. O
 novo cenário possuía duas redes privadas com instâncias alocadas entre compute nodes diferentes. O problema persistiu mesmo utilizando apenas uma conexão para
 cada rede privada. Constatou-se que quando um dos clientes gera muito tráfego UDP, é possível congestionar e criar instabilidade nos compute nodes envolvidos na comunicação, a ponto de
 afetar outros clientes.
