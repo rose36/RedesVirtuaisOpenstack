@@ -8,7 +8,4 @@ Em experimentos bidirecionais, a maior diferença entre as médias TCP e UDP tam
 
 Já as Tabelas com os resultados entre compute nodes diferentes, apresentam o comportamento do tráfego apenas com fluxos TCP. É possível observar que não houve grandes diferenças entre conexões unidirecionais e bidirecionais, e os resultados atingidos foram semelhantes. O uso de Open vSwitch com VXLAN obteve maiores taxas de vazão na maioria dos resultados, e também demonstrou melhor desempenho quando utilizado um maior número de instâncias.
 
-Os gráficos apresentam uma visão geral do desempenho de cada tecnologia para melhor compreensão dos resultados.
-
-
-</p>
+Os gráficos apresentam uma visão geral do desempenho de cada tecnologia para melhor compreensão dos resultados.</p>
