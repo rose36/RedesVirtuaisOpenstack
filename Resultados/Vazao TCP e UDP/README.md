@@ -1,6 +1,4 @@
-<p align="justify">
-
-Em todos os experimentos realizados entre instâncias pertencentes ao mesmo compute node, as taxas de transferência em conexões UDP foram maiores quando comparadas com conexões TCP. Os resultados obtidos foram ainda mais significativos em experimentos bidirecionais.
+<p align="justify">Em todos os experimentos realizados entre instâncias pertencentes ao mesmo compute node, as taxas de transferência em conexões UDP foram maiores quando comparadas com conexões TCP. Os resultados obtidos foram ainda mais significativos em experimentos bidirecionais.
 
 As Tabelas com os resultados no mesmo compute node, mostram um comparativo entre a média da vazão TCP e UDP, levando em consideração a variação na quantidade de conexões simultâneas. É possível observar que em conexões unidirecionais a única tecnologia que apresentou maior diferença na média entre fluxos TCP e o UDP foi Open vSwitch com VXLAN, quando utilizou 8 instâncias. A média UDP obtida foi em torno de 20% a mais quando se comparada com a média TCP.
 
