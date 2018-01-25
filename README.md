@@ -135,4 +135,5 @@ Passo 2:
 Roseli da Rocha Barbosa
 
 Mestranda em Ciência da Computação na Universidade Federal de Pernambuco 
+
 Graduada em Redes de Computadores na Universidade Federal do Ceará
